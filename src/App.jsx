@@ -112,7 +112,7 @@ function App() {
             <Button
                 variant={"contained"}
                 onClick={handleTravelPlanGenerateButtonClick}
-                sx={{display: "block"}}
+                sx={{ display: "block" }}
             >
               여행 계획 생성
             </Button>

@@ -2,7 +2,7 @@ import {Box, Card, CardContent, CardHeader, Chip, IconButton, Stack, TextField, 
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useState} from "react";
 
-export const DestinationCard = ({keywords, onDelete, onRemoveKeyword, onAddKeyword}) => {
+export const DestinationCard = ({ keywords, onDelete, onRemoveKeyword, onAddKeyword }) => {
   const [text, setText] = useState('');
 
   function handleEnterKeyDownEvent(event) {
