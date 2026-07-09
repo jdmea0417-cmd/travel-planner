@@ -1,23 +1,31 @@
-import {Box, Card, Chip, Stack, TextField, Typography} from "@mui/material";
+import {Box, Card, CardContent, CardHeader, Chip, IconButton, Stack, TextField, Typography} from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 
-export const DestinationKeywordInputCard = ({keywords}) => {
+export const DestinationKeywordInputCard = ({keywords, onDeleteDestination, onDeleteKeyword}) => {
   return (
-      <Card
-          sx={{
-            padding: 2
-          }}
-      >
-        <Stack spacing={2}>
-          <Typography variant={"h5"}>여행지</Typography>
-          <Box>
-            {
-              keywords.map((keyword, index) => (
-                  <Chip label={keyword} onDelete={() => {}}></Chip>
-              ))
+      <Card>
+        <CardHeader
+            title={"여행지"}
+            action={
+              <IconButton
+                  onClick={onDeleteDestination}
+              >
+                <DeleteIcon/>
+              </IconButton>
             }
-          </Box>
-          <TextField label={"키워드"}></TextField>
-        </Stack>
+        ></CardHeader>
+        <CardContent>
+          <Stack spacing={2}>
+            <Box>
+              {
+                keywords.map((keyword, index) => (
+                    <Chip label={keyword} key={index} onDelete={onDeleteKeyword}></Chip>
+                ))
+              }
+            </Box>
+            <TextField label={"키워드"}></TextField>
+          </Stack>
+        </CardContent>
       </Card>
   );
 }

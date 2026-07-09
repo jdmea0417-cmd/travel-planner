@@ -31,7 +31,7 @@ function App() {
     }
   ]);
 
-  async function handleGenerateButtonClick() {
+  async function handleTravelPlanGenerateButtonClick() {
     await axios.create()
         .post(
             API_URL,
@@ -57,6 +57,22 @@ function App() {
         });
   }
 
+  function handleDestinationAddButtonClick() {
+    const empty = {
+      keywords: []
+    };
+
+    setDestinations(() => [...destinations, empty]);
+  }
+
+  function handleDestinationRemoveButtonClick() {
+    console.log("Destination remove button clicked");
+  }
+
+  function handleKeywordRemoveButtonClick() {
+    console.log("Keyword remove button clicked");
+  }
+
   return (
       <Container maxWidth={"sm"}>
         <Box>
@@ -66,11 +82,27 @@ function App() {
             <KoreanLocaleDatePicker label={"여행종료일"}></KoreanLocaleDatePicker>
             {
               destinations.map((destination, index) => (
-                  <DestinationKeywordInputCard keywords={destination.keywords}></DestinationKeywordInputCard>
+                  <DestinationKeywordInputCard
+                      key={index}
+                      keywords={destination.keywords}
+                      onDeleteDestination={handleDestinationRemoveButtonClick}
+                      onDeleteKeyword={handleKeywordRemoveButtonClick}
+                  ></DestinationKeywordInputCard>
               ))
             }
-            <Button variant={"outlined"}>여행지 추가</Button>
-            <Button variant={"contained"} onClick={handleGenerateButtonClick} sx={{display: "block"}}>여행 계획 생성</Button>
+            <Button
+                variant={"outlined"}
+                onClick={handleDestinationAddButtonClick}
+            >
+              여행지 추가
+            </Button>
+            <Button
+                variant={"contained"}
+                onClick={handleTravelPlanGenerateButtonClick}
+                sx={{display: "block"}}
+            >
+              여행 계획 생성
+            </Button>
           </Stack>
         </Box>
       </Container>
