@@ -4,13 +4,15 @@ import {DestinationCard} from "./components/DestinationCard.jsx";
 import {KoreanDatePicker} from "./components/KoreanDatePicker.jsx";
 import {TravelAreaSelect} from "./components/TravelAreaSelect.jsx";
 import axios from "axios";
+import dayjs from "dayjs";
+import "dayjs/locale/ko.js"
 
 const API_URL = "http://localhost:8080";
 
 function App() {
-  const [area, setArea] = useState(null);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [area, setArea] = useState("all");
+  const [startDate, setStartDate] = useState(() => dayjs().locale("ko"));
+  const [endDate, setEndDate] = useState(() => dayjs().locale("ko"));
   const [destinations, setDestinations] = useState([
     {
       keywords: [
@@ -84,11 +86,11 @@ function App() {
       <Container maxWidth={"sm"}>
         <Box>
           <Stack spacing={2}>
-            <TravelAreaSelect></TravelAreaSelect>
+            <TravelAreaSelect area={area} onChange={(newArea) => setArea(newArea)}></TravelAreaSelect>
 
-            <KoreanDatePicker label={"여행시작일"}></KoreanDatePicker>
+            <KoreanDatePicker label={"여행시작일"} onChange={(newDate) => setStartDate(newDate)}></KoreanDatePicker>
 
-            <KoreanDatePicker label={"여행종료일"}></KoreanDatePicker>
+            <KoreanDatePicker label={"여행종료일"} onChange={(newDate) => setEndDate(newDate)}></KoreanDatePicker>
 
             {
               destinations.map((destination, destinationIndex) => (
