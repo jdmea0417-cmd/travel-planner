@@ -6,10 +6,13 @@ import {TravelAreaSelect} from "./components/TravelAreaSelect.jsx";
 import axios from "axios";
 import dayjs from "dayjs";
 import "dayjs/locale/ko.js"
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 const API_URL = "http://localhost:8080";
 
-function App() {
+function Home() {
   const [area, setArea] = useState("all");
   const [startDate, setStartDate] = useState(() => dayjs().locale("ko"));
   const [endDate, setEndDate] = useState(() => dayjs().locale("ko"));
@@ -68,6 +71,19 @@ function App() {
       <Container maxWidth={"sm"}>
         <Box>
           <Stack spacing={2}>
+            <Stack
+              direction="row"
+              spacing={2}
+              justifyContent="center"
+            >
+              <Button component={Link} to="/login">
+                로그인
+              </Button>
+
+              <Button component={Link} to="/signup">
+                회원가입
+              </Button>
+            </Stack>
             <TravelAreaSelect area={area} onChange={(newArea) => setArea(newArea)}></TravelAreaSelect>
 
             <KoreanDatePicker label={"여행시작일"} onChange={(newDate) => setStartDate(newDate)}></KoreanDatePicker>
@@ -105,5 +121,24 @@ function App() {
       </Container>
   )
 }
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
 
-export default App
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
+        <Route
+          path="/signup"
+          element={<Signup />}
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
