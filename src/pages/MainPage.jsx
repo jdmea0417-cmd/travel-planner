@@ -72,7 +72,7 @@ export const MainPage = () => {
   }
 
   return (
-      <Container maxWidth={"sm"}>
+      <Container maxWidth="sm" sx={{ paddingX: 0 }}>
         <Box>
           <TravelPlannerAppBar></TravelPlannerAppBar>
           <Stack spacing={2} sx={{ marginY: 2 }}>

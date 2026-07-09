@@ -40,7 +40,7 @@ export const ResultPage = () => {
   ];
 
   return (
-      <Container maxWidth="sm">
+      <Container maxWidth="sm" sx={{ paddingX: 0 }}>
         <Box>
           <TravelPlannerAppBar></TravelPlannerAppBar>
           <Timeline
