@@ -13,25 +13,7 @@ function App() {
   const [area, setArea] = useState("all");
   const [startDate, setStartDate] = useState(() => dayjs().locale("ko"));
   const [endDate, setEndDate] = useState(() => dayjs().locale("ko"));
-  const [destinations, setDestinations] = useState([
-    {
-      keywords: [
-        "경복궁"
-      ]
-    },
-    {
-      keywords: [
-        "피자",
-        "경치"
-      ]
-    },
-    {
-      keywords: [
-        "커피",
-        "디저트"
-      ]
-    }
-  ]);
+  const [destinations, setDestinations] = useState([]);
 
   async function handleTravelPlanGenerateButtonClick() {
     await axios.create()
