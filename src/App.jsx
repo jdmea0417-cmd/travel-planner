@@ -65,16 +65,18 @@ function App() {
     setDestinations(() => [...destinations, empty]);
   }
 
-  function handleDestinationRemoveButtonClick() {
-    console.log("Destination remove button clicked");
+  function handleDestinationRemoveButtonClick(destinationIndex) {
+    setDestinations(() => destinations.toSpliced(destinationIndex, 1));
   }
 
-  function handleKeywordRemoveButtonClick() {
-    console.log("Keyword remove button clicked");
+  function handleKeywordRemoveButtonClick(destinationIndex, keywordIndex) {
+    destinations[destinationIndex].keywords.splice(keywordIndex, 1);
+    setDestinations(() => [...destinations]);
   }
 
-  function handleKeywordAddEvent() {
-    console.log("Keyword add event triggered");
+  function handleKeywordAddEvent(destinationIndex, keyword) {
+    destinations[destinationIndex].keywords.push(keyword);
+    setDestinations(() => [...destinations]);
   }
 
   return (
@@ -88,13 +90,13 @@ function App() {
             <KoreanLocaleDatePicker label={"여행종료일"}></KoreanLocaleDatePicker>
 
             {
-              destinations.map((destination, index) => (
+              destinations.map((destination, destinationIndex) => (
                   <DestinationKeywordInputCard
-                      key={index}
+                      key={destinationIndex}
                       keywords={destination.keywords}
-                      onDeleteDestination={handleDestinationRemoveButtonClick}
-                      onDeleteKeyword={handleKeywordRemoveButtonClick}
-                      onAddKeyword={handleKeywordAddEvent}
+                      onDeleteDestination={() => handleDestinationRemoveButtonClick(destinationIndex)}
+                      onDeleteKeyword={(keywordIndex) => handleKeywordRemoveButtonClick(destinationIndex, keywordIndex)}
+                      onAddKeyword={(keyword) => handleKeywordAddEvent(destinationIndex, keyword)}
                   ></DestinationKeywordInputCard>
               ))
             }

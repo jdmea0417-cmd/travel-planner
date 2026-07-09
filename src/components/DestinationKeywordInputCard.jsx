@@ -19,7 +19,7 @@ export const DestinationKeywordInputCard = ({keywords, onDeleteDestination, onDe
             <Box>
               {
                 keywords.map((keyword, index) => (
-                    <Chip label={keyword} key={index} onDelete={onDeleteKeyword}></Chip>
+                    <Chip label={keyword} key={index} onDelete={() => onDeleteKeyword(index)}></Chip>
                 ))
               }
             </Box>
