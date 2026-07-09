@@ -1,36 +1,13 @@
 import {useState} from 'react'
-import {
-  Box,
-  Button,
-  Container,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-} from "@mui/material";
+import {Box, Button, Container, Stack,} from "@mui/material";
 import {DestinationKeywordInputCard} from "./components/DestinationKeywordInputCard.jsx";
 import {KoreanLocaleDatePicker} from "./components/KoreanLocaleDatePicker.jsx";
+import {TravelAreaSelect} from "./components/TravelAreaSelect.jsx";
 
 function App() {
-  const [areas, setAreas] = useState([
-    {
-      name: "전국",
-      value: "all"
-    },
-    {
-      name: "서울",
-      value: "seoul"
-    },
-    {
-      name: "경기",
-      value: "gyeonggi"
-    },
-    {
-      name: "강원",
-      value: "gangwon"
-    }
-  ]);
+  const [area, setArea] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [destinations, setDestinations] = useState([
     {
       keywords: [
@@ -55,16 +32,7 @@ function App() {
       <Container maxWidth={"sm"}>
         <Box>
           <Stack spacing={2}>
-            <FormControl>
-              <InputLabel>지역</InputLabel>
-              <Select variant={"outlined"}>
-                {
-                  areas.map((area, index) => (
-                      <MenuItem value={area.value}>{area.name}</MenuItem>
-                  ))
-                }
-              </Select>
-            </FormControl>
+            <TravelAreaSelect></TravelAreaSelect>
             <KoreanLocaleDatePicker label={"여행시작일"}></KoreanLocaleDatePicker>
             <KoreanLocaleDatePicker label={"여행종료일"}></KoreanLocaleDatePicker>
             {
