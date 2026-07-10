@@ -71,12 +71,14 @@ export default function RegisterPage() {
               <TextField
                   label="이름"
                   variant="outlined"
+                  value={name}
                   onChange={handleNameChange}
               />
 
               <TextField
                   label="아이디"
                   variant="outlined"
+                  value={userId}
                   onChange={handleUserIdChange}
               />
 
@@ -84,6 +86,7 @@ export default function RegisterPage() {
                   label="비밀번호"
                   type="password"
                   variant="outlined"
+                  value={password}
                   onChange={handlePasswordChange}
               />
 
