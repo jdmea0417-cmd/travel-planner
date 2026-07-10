@@ -4,23 +4,31 @@ import {
   Button,
   Typography,
   Container,
-  Box,
   Card,
   CardContent, Divider,
 } from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import axios from "axios";
-import { useState } from "react";
+import {useState} from "react";
 import {api} from "../api/axios.js";
+import {useAccessTokenContext} from "../contexts/AccessTokenContext.jsx";
 
 export default function LoginPage() {
-  const navigate = useNavigate();
-
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
 
+  const {accessToken, setAccessToken} = useAccessTokenContext();
+
+  const navigate = useNavigate();
+
   function handleSignupButtonClick() {
     navigate("/register");
+  }
+
+  function getAccessToken(response) {
+    const authorization = response.headers.authorization;
+    const accessToken = authorization.replace("Bearer ", "");
+
+    return accessToken;
   }
 
   async function handleLoginButtonClick() {
@@ -35,6 +43,8 @@ export default function LoginPage() {
       if (response.status !== 200) {
         return;
       }
+
+      setAccessToken(() => getAccessToken(response));
 
       navigate("/");
 

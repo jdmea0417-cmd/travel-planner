@@ -1,11 +1,16 @@
 import {AppBar, Button, IconButton, Toolbar, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import HomeIcon from '@mui/icons-material/Home';
+import {useAccessTokenContext} from "../contexts/AccessTokenContext.jsx";
 
 export const TopAppBar = () => {
+  const {accessToken, setAccessToken} = useAccessTokenContext();
+
   const navigate = useNavigate();
 
   function handleLogoutButtonClick() {
+    setAccessToken(null);
+
     navigate("/login");
   }
 

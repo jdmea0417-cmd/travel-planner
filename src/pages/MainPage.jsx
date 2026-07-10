@@ -9,12 +9,15 @@ import {DestinationCard} from "../components/DestinationCard.jsx";
 import {TopAppBar} from "../components/TopAppBar.jsx";
 import {api} from "../api/axios.js";
 import {MainPageBottomAppBar} from "../components/MainPageBottomAppBar.jsx";
+import {useAccessTokenContext} from "../contexts/AccessTokenContext.jsx";
 
 export const MainPage = () => {
   const [area, setArea] = useState("all");
   const [startDate, setStartDate] = useState(() => dayjs().locale("ko"));
   const [endDate, setEndDate] = useState(() => dayjs().locale("ko"));
   const [destinations, setDestinations] = useState([]);
+
+  const {accessToken, setAccessToken} = useAccessTokenContext();
 
   const navigate = useNavigate();
 
@@ -24,7 +27,11 @@ export const MainPage = () => {
       startDate: startDate,
       endDate: endDate,
       destinations: destinations
-    }, {})
+    }, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
         .then(response => {
           if (response.status !== 200) {
             return;
