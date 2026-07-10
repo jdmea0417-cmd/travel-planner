@@ -96,6 +96,7 @@ export const MainPage = () => {
 
             <Button
                 variant={"outlined"}
+                size={"large"}
                 onClick={handleDestinationAddButtonClick}
             >
               여행지 추가
@@ -103,6 +104,7 @@ export const MainPage = () => {
 
             <Button
                 variant={"contained"}
+                size={"large"}
                 onClick={handleTravelPlanGenerateButtonClick}
                 sx={{ display: "block" }}
             >
