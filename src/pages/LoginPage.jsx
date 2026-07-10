@@ -11,6 +11,7 @@ import {
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
+import {api} from "../api/axios.js";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -23,20 +24,25 @@ export default function LoginPage() {
   }
 
   async function handleLoginButtonClick() {
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/login",
-        {
-          userId,
-          password,
-        }
-      );
+    // TODO
+    navigate("/");
 
-      console.log(response.data);
-      alert("로그인 성공");
+    try {
+      const data = {
+        userId,
+        password,
+      }
+
+      const response = await api.post("/auth/login", data);
+
+      if (response.status !== 200) {
+        return;
+      }
+
+      navigate("/");
+
     } catch (error) {
-      console.error(error);
-      alert("로그인 실패");
+      console.log(error);
     }
   }
 
