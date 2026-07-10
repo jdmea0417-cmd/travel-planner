@@ -2,7 +2,7 @@ import {AppBar, Button, IconButton, Toolbar, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import HomeIcon from '@mui/icons-material/Home';
 
-export const TravelPlannerAppBar = () => {
+export const TopAppBar = () => {
   const navigate = useNavigate();
 
   function handleLogoutButtonClick() {

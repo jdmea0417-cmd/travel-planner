@@ -1,13 +1,14 @@
 import {useState} from 'react'
-import {Button, Container, Stack,} from "@mui/material";
+import {AppBar, Box, Button, Container, Stack, Toolbar,} from "@mui/material";
 import dayjs from "dayjs";
 import "dayjs/locale/ko.js"
 import {useNavigate} from "react-router-dom";
 import {KoreanDatePicker} from "../components/KoreanDatePicker.jsx";
 import {TravelAreaSelect} from "../components/TravelAreaSelect.jsx";
 import {DestinationCard} from "../components/DestinationCard.jsx";
-import {TravelPlannerAppBar} from "../components/TravelPlannerAppBar.jsx";
+import {TopAppBar} from "../components/TopAppBar.jsx";
 import {api} from "../api/axios.js";
+import {MainPageBottomAppBar} from "../components/MainPageBottomAppBar.jsx";
 
 export const MainPage = () => {
   const [area, setArea] = useState("all");
@@ -63,8 +64,8 @@ export const MainPage = () => {
   }
 
   return (
-      <Container maxWidth="sm" sx={{ paddingX: 0, height: '100vh' }}>
-        <TravelPlannerAppBar></TravelPlannerAppBar>
+      <Container maxWidth="sm" sx={{ display: "flex", flexDirection: "column", paddingX: 0, height: '100vh' }}>
+        <TopAppBar></TopAppBar>
         <Stack spacing={2} sx={{ marginY: 2 }}>
           <TravelAreaSelect area={area} onChange={(newArea) => setArea(newArea)}></TravelAreaSelect>
 
@@ -91,16 +92,9 @@ export const MainPage = () => {
           >
             여행지 추가
           </Button>
-
-          <Button
-              variant={"contained"}
-              size={"large"}
-              onClick={handleTravelPlanGenerateButtonClick}
-              sx={{ display: "block" }}
-          >
-            여행 계획 생성
-          </Button>
         </Stack>
+        <Box sx={{ flexGrow: 1 }}></Box>
+        <MainPageBottomAppBar onClick={handleTravelPlanGenerateButtonClick}></MainPageBottomAppBar>
       </Container>
   )
 }
