@@ -24,9 +24,6 @@ export default function LoginPage() {
   }
 
   async function handleLoginButtonClick() {
-    // TODO
-    navigate("/");
-
     try {
       const data = {
         userId,

@@ -20,8 +20,6 @@ export default function RegisterPage() {
   const navigate = useNavigate();
 
   async function handleRegisterButtonClick() {
-    navigate("/login");
-
     await api.post("/auth/register", {
       name: name,
       userId: userId,

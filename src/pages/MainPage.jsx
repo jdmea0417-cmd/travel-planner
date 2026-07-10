@@ -19,8 +19,6 @@ export const MainPage = () => {
   const navigate = useNavigate();
 
   async function handleTravelPlanGenerateButtonClick() {
-    navigate("/result");
-
     await api.post("/travel-planner", {
       area: area,
       startDate: startDate,
