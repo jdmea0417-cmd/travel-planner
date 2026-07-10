@@ -16,9 +16,11 @@
     "@mui/lab": "^9.0.0-beta.6",
     "@mui/material": "^9.2.0",
     "@mui/x-date-pickers": "^9.8.0",
+    "axios": "^1.18.1",
     "dayjs": "^1.11.21",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "react-router-dom": "^7.18.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
