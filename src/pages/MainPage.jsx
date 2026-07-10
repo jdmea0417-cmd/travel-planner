@@ -1,6 +1,5 @@
 import {useState} from 'react'
-import {Box, Button, Container, Stack,} from "@mui/material";
-import axios from "axios";
+import {Button, Container, Stack,} from "@mui/material";
 import dayjs from "dayjs";
 import "dayjs/locale/ko.js"
 import {useNavigate} from "react-router-dom";
@@ -8,8 +7,7 @@ import {KoreanDatePicker} from "../components/KoreanDatePicker.jsx";
 import {TravelAreaSelect} from "../components/TravelAreaSelect.jsx";
 import {DestinationCard} from "../components/DestinationCard.jsx";
 import {TravelPlannerAppBar} from "../components/TravelPlannerAppBar.jsx";
-
-const API_URL = "http://localhost:8080";
+import {api} from "../api/axios.js";
 
 export const MainPage = () => {
   const [area, setArea] = useState("all");
@@ -20,27 +18,20 @@ export const MainPage = () => {
   const navigate = useNavigate();
 
   async function handleTravelPlanGenerateButtonClick() {
-    // TODO
     navigate("/result");
 
-    await axios.create()
-        .post(
-            API_URL,
-            {
-              area: area,
-              startDate: startDate,
-              endDate: endDate,
-              destinations: destinations
-            },
-            {}
-        )
+    await api.post("/travel-planner", {
+      area: area,
+      startDate: startDate,
+      endDate: endDate,
+      destinations: destinations
+    }, {})
         .then(response => {
           if (response.status !== 200) {
             return;
           }
 
-          console.log("결과페이지로 이동");
-          console.log(response.data);
+          navigate("/result");
 
         })
         .catch(error => {
