@@ -8,7 +8,6 @@ import {CssBaseline} from "@mui/material";
 function App() {
   return (
       <>
-        <CssBaseline/>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<MainPage/>}/>

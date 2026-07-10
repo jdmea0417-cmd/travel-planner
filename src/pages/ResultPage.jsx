@@ -4,7 +4,7 @@ import {
   Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem,
   TimelineOppositeContent, TimelineSeparator
 } from "@mui/lab";
-import {TravelPlannerAppBar} from "../components/TravelPlannerAppBar.jsx";
+import {TopAppBar} from "../components/TopAppBar.jsx";
 
 export const ResultPage = () => {
   
@@ -14,16 +14,8 @@ export const ResultPage = () => {
 
   return (
       <Container maxWidth="sm" sx={{ paddingX: 0, height: '100vh' }}>
-        <TravelPlannerAppBar></TravelPlannerAppBar>
-        <Timeline
-            position="right"
-            sx={{
-              "& .MuiTimelineItem-root:before": {
-                flex: 0,
-                padding: 0,
-              },
-            }}
-        >
+        <TopAppBar></TopAppBar>
+        <Timeline>
           {
             destinations.map((destination, index) => {
               const isLastElement = index === destinations.length - 1;
