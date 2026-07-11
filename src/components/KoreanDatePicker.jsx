@@ -5,7 +5,7 @@ import {useState} from 'react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 
-export const KoreanDatePicker = ({value, label, onChange}) => {
+export const KoreanDatePicker = ({value, label, disablePast, onChange}) => {
   const [date, setDate] = useState(value ? dayjs(value) : null);
 
   const handleDateChange = (newDate) => {
@@ -23,6 +23,7 @@ export const KoreanDatePicker = ({value, label, onChange}) => {
             value={date}
             onChange={handleDateChange}
             format="YYYY-MM-DD"
+            disablePast={disablePast}
         />
       </LocalizationProvider>
   );

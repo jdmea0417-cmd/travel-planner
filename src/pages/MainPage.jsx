@@ -78,25 +78,11 @@ export const MainPage = () => {
   }
 
   function isReadyForGeneratingTravelPlan() {
-    return !isDestinationKeywordsEmpty(destinations) && isTravelDateRangeValid(startDate, endDate);
+    return !isDestinationKeywordsEmpty(destinations) && isEndDateOnOrAfterStartDate(startDate, endDate);
 
     function isDestinationKeywordsEmpty(destinations) {
       const nonEmpty = destinations.filter(destination => destination.keywords.length !== 0);
       return nonEmpty.length === 0;
-    }
-
-    function isTravelDateRangeValid(startDate, endDate) {
-      return isPresentOrFuture(startDate) && isEndDateOnOrAfterStartDate(startDate, endDate);
-    }
-
-    function isPresentOrFuture(date) {
-      try {
-        const now = dayjs().locale("ko").startOf("day");
-        return date.diff(now) >= 0;
-
-      } catch (error) {
-        return false;
-      }
     }
 
     function isEndDateOnOrAfterStartDate(startDate, endDate) {
@@ -114,11 +100,22 @@ export const MainPage = () => {
         <TopAppBar></TopAppBar>
 
         <Stack spacing={2} sx={{marginY: 2, paddingX: 1}}>
-          <TravelAreaSelect area={area} onChange={(newArea) => setArea(newArea)}></TravelAreaSelect>
+          <TravelAreaSelect
+              area={area}
+              onChange={(newArea) => setArea(newArea)}
+          ></TravelAreaSelect>
 
-          <KoreanDatePicker label={"여행시작일"} onChange={(newDate) => setStartDate(newDate)}></KoreanDatePicker>
+          <KoreanDatePicker
+              label={"여행시작일"}
+              disablePast={true}
+              onChange={(newDate) => setStartDate(newDate)}
+          ></KoreanDatePicker>
 
-          <KoreanDatePicker label={"여행종료일"} onChange={(newDate) => setEndDate(newDate)}></KoreanDatePicker>
+          <KoreanDatePicker
+              label={"여행종료일"}
+              disablePast={true}
+              onChange={(newDate) => setEndDate(newDate)}
+          ></KoreanDatePicker>
 
           {
             destinations.map((destination, destinationIndex) => (
