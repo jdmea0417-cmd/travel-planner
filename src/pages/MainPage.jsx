@@ -1,5 +1,5 @@
-import {useState, useEffect} from 'react'
-import {Box, Button, Container, Stack, Snackbar, Alert} from "@mui/material";
+import {useState} from 'react'
+import {AppBar, Box, Button, Container, Stack, Toolbar,} from "@mui/material";
 import dayjs from "dayjs";
 import "dayjs/locale/ko.js"
 import {useNavigate} from "react-router-dom";
@@ -9,62 +9,45 @@ import {DestinationCard} from "../components/DestinationCard.jsx";
 import {TopAppBar} from "../components/TopAppBar.jsx";
 import {api} from "../api/axios.js";
 import {MainPageBottomAppBar} from "../components/MainPageBottomAppBar.jsx";
-import {useAccessToken} from "../context/AccessTokenContext.jsx";
+import {useAccessTokenContext} from "../contexts/AccessTokenContext.jsx";
 
 export const MainPage = () => {
   const [area, setArea] = useState("all");
   const [startDate, setStartDate] = useState(() => dayjs().locale("ko"));
   const [endDate, setEndDate] = useState(() => dayjs().locale("ko"));
   const [destinations, setDestinations] = useState([]);
-  const [error, setError] = useState(null);
 
-  const { accessToken } = useAccessToken();
+  const {accessToken, setAccessToken} = useAccessTokenContext();
 
   const navigate = useNavigate();
 
-  // Redirect to login page if no access token is present
-  useEffect(() => {
-    if (!accessToken) {
-      navigate("/login");
-    }
-  }, [accessToken, navigate]);
-
   async function handleTravelPlanGenerateButtonClick() {
-    // Validation: At least one destination keyword is required
-    const formattedDestinations = destinations
-      .map(d => ({
-        keyword: d.keywords && d.keywords.length > 0 ? d.keywords[0] : ""
-      }))
-      .filter(d => d.keyword !== "");
-
-    if (formattedDestinations.length === 0) {
-      setError("최소 하나의 여행지 키워드를 입력해주세요.");
-      return;
-    }
-
-    setError(null);
-
-    try {
-      const response = await api.post("/travel-planner", {
-        area: area,
-        startDate: startDate.format("YYYY-MM-DD"),
-        endDate: endDate.format("YYYY-MM-DD"),
-        destinations: formattedDestinations
-      });
-
-      if (response.status !== 200 && response.status !== 201) {
-        throw new Error("서버 응답 오류");
+    await api.post("/travel-planner", {
+      area: area,
+      startDate: startDate.format("YYYY-MM-DD"),
+      endDate: endDate.format("YYYY-MM-DD"),
+      destinations: destinations
+    }, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
       }
+    })
+        .then(response => {
 
-      navigate("/result", {
-        state: {
-          destinations: response.data.destinations
-        }
-      });
-    } catch (err) {
-      console.error(err);
-      setError("여행 계획 생성에 실패했습니다. 다시 시도해 주세요.");
-    }
+          if (response.status !== 200) {
+            return;
+          }
+
+          navigate("/result", {
+            state: {
+              destinations: response.data.destinations
+            }
+          });
+
+        })
+        .catch(error => {
+          console.log(error);
+        });
   }
 
   function handleDestinationAddButtonClick() {
@@ -76,34 +59,24 @@ export const MainPage = () => {
   }
 
   function removeDestination(destinationIndex) {
-    const copy = [...destinations];
-    copy.splice(destinationIndex, 1);
-    setDestinations(copy);
+    destinations.splice(destinationIndex, 1);
+    setDestinations(() => [...destinations]);
   }
 
   function removeKeyword(destinationIndex, keywordIndex) {
-    const copy = [...destinations];
-    copy[destinationIndex] = {
-      ...copy[destinationIndex],
-      keywords: [...copy[destinationIndex].keywords]
-    };
-    copy[destinationIndex].keywords.splice(keywordIndex, 1);
-    setDestinations(copy);
+    destinations[destinationIndex].keywords.splice(keywordIndex, 1);
+    setDestinations(() => [...destinations]);
   }
 
   function addKeyword(destinationIndex, keyword) {
-    const copy = [...destinations];
-    copy[destinationIndex] = {
-      ...copy[destinationIndex],
-      keywords: [...copy[destinationIndex].keywords, keyword]
-    };
-    setDestinations(copy);
+    destinations[destinationIndex].keywords.push(keyword);
+    setDestinations(() => [...destinations]);
   }
 
   return (
       <Container maxWidth="sm" sx={{ display: "flex", flexDirection: "column", paddingX: 0, height: '100vh' }}>
         <TopAppBar></TopAppBar>
-        <Stack spacing={2} sx={{ marginY: 2, paddingX: 2 }}>
+        <Stack spacing={2} sx={{ marginY: 2 }}>
           <TravelAreaSelect area={area} onChange={(newArea) => setArea(newArea)}></TravelAreaSelect>
 
           <KoreanDatePicker label={"여행시작일"} onChange={(newDate) => setStartDate(newDate)}></KoreanDatePicker>
@@ -132,10 +105,6 @@ export const MainPage = () => {
         </Stack>
         <Box sx={{ flexGrow: 1 }}></Box>
         <MainPageBottomAppBar onClick={handleTravelPlanGenerateButtonClick}></MainPageBottomAppBar>
-
-        <Snackbar open={!!error} autoHideDuration={4000} onClose={() => setError(null)}>
-          <Alert severity="error">{error}</Alert>
-        </Snackbar>
       </Container>
   )
 }

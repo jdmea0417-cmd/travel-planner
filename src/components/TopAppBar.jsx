@@ -1,15 +1,17 @@
 import {AppBar, Button, IconButton, Toolbar, Typography} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import HomeIcon from '@mui/icons-material/Home';
-import {useAccessToken} from "../context/AccessTokenContext.jsx";
+import {useAccessTokenContext} from "../contexts/AccessTokenContext.jsx";
 
 export const TopAppBar = () => {
-  const { logout } = useAccessToken();
+  const {accessToken, setAccessToken} = useAccessTokenContext();
 
   const navigate = useNavigate();
 
   function handleLogoutButtonClick() {
-    logout();
+    setAccessToken(null);
+
+    navigate("/login");
   }
 
   function handleHomeButtonClick() {
@@ -28,7 +30,7 @@ export const TopAppBar = () => {
           >
             <HomeIcon/>
           </IconButton>
-          <Typography sx={{ flexGrow: 1 }}>여행계획도우미</Typography>
+          <Typography sx={{ flexGrow: 1 }}>여행게획도우미</Typography>
           <Button color="inherit" onClick={handleLogoutButtonClick}>로그아웃</Button>
         </Toolbar>
       </AppBar>

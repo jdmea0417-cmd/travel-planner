@@ -3,6 +3,7 @@ import {MainPage} from "./pages/MainPage.jsx";
 import {ResultPage} from "./pages/ResultPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
+import {CssBaseline} from "@mui/material";
 
 function App() {
   return (
