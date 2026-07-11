@@ -5,7 +5,6 @@ import {useAccessTokenContext} from "../contexts/AccessTokenContext.jsx";
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
-import {useEffect} from "react";
 
 export const TopAppBar = () => {
   const { accessToken, setAccessToken } = useAccessTokenContext();
@@ -46,10 +45,6 @@ export const TopAppBar = () => {
       return <SettingsBrightnessIcon/>;
     }
   }
-
-  useEffect(function setDefaultMode () {
-    setMode("dark");
-  }, [])
 
   return (
       <AppBar position="sticky">
