@@ -30,7 +30,7 @@ export const TopAppBar = () => {
           >
             <HomeIcon/>
           </IconButton>
-          <Typography sx={{ flexGrow: 1 }}>여행게획도우미</Typography>
+          <Typography sx={{ flexGrow: 1 }}>여행계획도우미</Typography>
           <Button color="inherit" onClick={handleLogoutButtonClick}>로그아웃</Button>
         </Toolbar>
       </AppBar>
