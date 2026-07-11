@@ -22,17 +22,19 @@ export const TravelAreaSelect = ({ area, onChange }) => {
     { name: "제주", value: "jeju" }
   ];
 
+  const label="지역";
+
   function handleSelectChange(event) {
     onChange(event.target.value);
   }
 
   return (
       <FormControl>
-        <InputLabel>지역</InputLabel>
-        <Select variant={"outlined"} value={area} onChange={handleSelectChange}>
+        <InputLabel>{label}</InputLabel>
+        <Select variant={"outlined"} label={label} value={area} onChange={handleSelectChange}>
           {
             areas.map((area, index) => (
-                <MenuItem value={area.value}>{area.name}</MenuItem>
+                <MenuItem value={area.value} key={index}>{area.name}</MenuItem>
             ))
           }
         </Select>
