@@ -78,14 +78,14 @@ export const MainPage = () => {
   }
 
   function isReadyForGeneratingTravelPlan() {
-    return !isDestinationKeywordsEmpty(destinations) && isEndDateOnOrAfterStartDate(startDate, endDate);
+    return !isDestinationKeywordsEmpty(destinations) && isDateRangeValid(startDate, endDate);
 
     function isDestinationKeywordsEmpty(destinations) {
       const nonEmpty = destinations.filter(destination => destination.keywords.length !== 0);
       return nonEmpty.length === 0;
     }
 
-    function isEndDateOnOrAfterStartDate(startDate, endDate) {
+    function isDateRangeValid(startDate, endDate) {
       try {
         return endDate.diff(startDate) >= 0;
 
