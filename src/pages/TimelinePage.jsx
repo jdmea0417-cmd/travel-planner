@@ -34,10 +34,12 @@ export const TimelinePage = () => {
                         <Typography variant="body2">{destination.time}</Typography>
                       </Stack>
                     </TimelineOppositeContent>
+
                     <TimelineSeparator>
                       <TimelineDot/>
                       {!isLastElement && <TimelineConnector/>}
                     </TimelineSeparator>
+
                     <TimelineContent>
                       <Typography variant="h6">{destination.place}</Typography>
                     </TimelineContent>
