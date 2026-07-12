@@ -72,6 +72,7 @@ export const TopAppBar = () => {
           </IconButton>
 
           <Typography
+              variant="h6"
               sx={{ flexGrow: 1 }}
           >
             여행계획도우미
