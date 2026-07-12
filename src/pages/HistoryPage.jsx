@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {
   Box,
-  Container,
+  Container, Skeleton,
   Stack,
   Typography,
 } from '@mui/material';
@@ -113,6 +113,7 @@ export const HistoryPage = () => {
       ]
     },
   ]);
+  const [ isLoading, setIsLoading ] = useState(true);
 
   useEffect(() => {
     const fetchTravelPlans = async () => {
@@ -130,6 +131,7 @@ export const HistoryPage = () => {
         }
 
         setTravelPlans(response.data);
+        setIsLoading(false);
 
       } catch (err) {
         console.error(err);
@@ -198,6 +200,46 @@ export const HistoryPage = () => {
     }
   }
 
+  // TODO
+  useEffect(function setIsLoadingFalseAfterOneSecond() {
+    async function setIsLoadingAfterTimeout(timeout) {
+      await new Promise(resolve => setTimeout(resolve, timeout));
+
+      setIsLoading(false);
+    }
+
+    setIsLoadingAfterTimeout(1000)
+  }, [])
+
+  function getSkeletons() {
+    return [ ...Array(3) ].map((_, index) => (
+        <Skeleton
+            key={index}
+            variant="rounded"
+            sx={{ height: 136 }}
+        />
+    ));
+  }
+
+  function getTravelPlanCards() {
+    return (
+        travelPlans.map((travelPlan, index) => (
+                <TravelPlanCard
+                    key={index}
+                    travelPlan={travelPlan}
+                    onClick={() => {
+                      navigateToTimelinePage(travelPlan);
+                    }}
+                    onDelete={(event) => {
+                      event.stopPropagation();
+                      removeTravelPlan(index)
+                    }}
+                ></TravelPlanCard>
+            )
+        )
+    );
+  }
+
   return (
       <Container
           maxWidth="sm"
@@ -210,19 +252,9 @@ export const HistoryPage = () => {
       >
         <TopAppBar/>
         <Stack spacing={2} sx={{ marginY: 2, paddingX: 1 }}>
-          {travelPlans.map((travelPlan, index) => (
-              <TravelPlanCard
-                  key={index}
-                  travelPlan={travelPlan}
-                  onClick={() => {
-                    navigateToTimelinePage(travelPlan);
-                  }}
-                  onDelete={(event) => {
-                    event.stopPropagation();
-                    removeTravelPlan(index)
-                  }}
-              ></TravelPlanCard>
-          ))}
+          {
+            isLoading ? getSkeletons() : getTravelPlanCards()
+          }
         </Stack>
       </Container>
   );
