@@ -5,16 +5,17 @@ import {
   Stack,
   TextField,
   Button,
-  Typography,
+  Typography, IconButton,
 } from "@mui/material";
-import {api} from "../api/axios.js";
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { api } from "../api/axios.js";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import HomeIcon from '@mui/icons-material/Home';
 
 export default function RegisterPage() {
-  const [name, setName] = useState("");
-  const [userId, setUserId] = useState("");
-  const [password, setPassword] = useState("");
+  const [ name, setName ] = useState("");
+  const [ userId, setUserId ] = useState("");
+  const [ password, setPassword ] = useState("");
 
   const navigate = useNavigate();
 
@@ -61,6 +62,10 @@ export default function RegisterPage() {
     setPassword(event.target.value);
   }
 
+  function handleHomeButtonClick() {
+    navigate("/");
+  }
+
   return (
       <Container
           maxWidth="xs"
@@ -73,9 +78,15 @@ export default function RegisterPage() {
         <Card sx={{ width: "100%" }}>
           <CardContent>
             <Stack spacing={2}>
-              <Typography variant="h5">
-                회원가입
-              </Typography>
+              <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+                <IconButton onClick={handleHomeButtonClick}>
+                  <HomeIcon/>
+                </IconButton>
+
+                <Typography variant="h5">
+                  회원가입
+                </Typography>
+              </Stack>
 
               <TextField
                   label="이름"

@@ -6,16 +6,17 @@ import {
   Container,
   Card,
   CardContent,
-  Divider,
+  Divider, IconButton,
 } from "@mui/material";
-import {useNavigate} from "react-router-dom";
-import {useState} from "react";
-import {api} from "../api/axios.js";
-import {useAccessTokenContext} from "../contexts/AccessTokenContext.jsx";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { api } from "../api/axios.js";
+import { useAccessTokenContext } from "../contexts/AccessTokenContext.jsx";
+import HomeIcon from '@mui/icons-material/Home';
 
 export default function LoginPage() {
-  const [userId, setUserId] = useState("");
-  const [password, setPassword] = useState("");
+  const [ userId, setUserId ] = useState("");
+  const [ password, setPassword ] = useState("");
 
   const { setAccessToken } = useAccessTokenContext();
 
@@ -54,6 +55,10 @@ export default function LoginPage() {
     }
   }
 
+  function handleHomeButtonClick() {
+    navigate("/");
+  }
+
   return (
       <Container
           maxWidth="xs"
@@ -66,11 +71,15 @@ export default function LoginPage() {
         <Card sx={{ width: "100%" }}>
           <CardContent>
             <Stack spacing={2}>
-              <Typography
-                  variant="h5"
-              >
-                로그인
-              </Typography>
+              <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+                <IconButton onClick={handleHomeButtonClick}>
+                  <HomeIcon/>
+                </IconButton>
+
+                <Typography variant="h5">
+                  로그인
+                </Typography>
+              </Stack>
 
               <TextField
                   label="아이디"
