@@ -43,11 +43,11 @@ export const MainPage = () => {
 
       const options = {
         state: {
-          destinations: response.data.destinations
+          travelPlan: response.data
         }
       };
 
-      navigate("/result", options);
+      navigate("/timeline", options);
 
     } catch (err) {
       console.error(err);
