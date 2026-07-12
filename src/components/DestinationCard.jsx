@@ -37,7 +37,7 @@ export const DestinationCard = ({ keywords, onDelete, onRemoveKeyword, onAddKeyw
               </IconButton>
             }
         ></CardHeader>
-        <CardContent>
+        <CardContent sx={{paddingTop: 0}}>
           <Stack spacing={2}>
             <Stack direction="row" spacing={1} sx={{ overflowX: "auto", height: "32px" }}>
               {
