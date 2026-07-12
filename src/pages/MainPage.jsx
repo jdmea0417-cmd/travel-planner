@@ -107,12 +107,14 @@ export const MainPage = () => {
 
           <KoreanDatePicker
               label={"여행시작일"}
+              value={startDate}
               disablePast={true}
               onChange={(newDate) => setStartDate(newDate)}
           ></KoreanDatePicker>
 
           <KoreanDatePicker
               label={"여행종료일"}
+              value={endDate}
               disablePast={true}
               onChange={(newDate) => setEndDate(newDate)}
           ></KoreanDatePicker>
