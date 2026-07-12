@@ -1,22 +1,22 @@
-import {useState, useEffect} from 'react'
-import {Box, Button, Container, Stack, Snackbar, Alert, AppBar} from "@mui/material";
+import { useState } from 'react'
+import { Box, Button, Container, Stack, Alert, AppBar } from "@mui/material";
 import dayjs from "dayjs";
 import "dayjs/locale/ko.js";
-import {useNavigate} from "react-router-dom";
-import {KoreanDatePicker} from "../components/KoreanDatePicker.jsx";
-import {TravelAreaSelect} from "../components/TravelAreaSelect.jsx";
-import {DestinationCard} from "../components/DestinationCard.jsx";
-import {TopAppBar} from "../components/TopAppBar.jsx";
-import {api} from "../api/axios.js";
-import {useAccessTokenContext} from "../contexts/AccessTokenContext.jsx";
+import { useNavigate } from "react-router-dom";
+import { KoreanDatePicker } from "../components/KoreanDatePicker.jsx";
+import { TravelAreaSelect } from "../components/TravelAreaSelect.jsx";
+import { DestinationCard } from "../components/DestinationCard.jsx";
+import { TopAppBar } from "../components/TopAppBar.jsx";
+import { api } from "../api/axios.js";
+import { useAccessTokenContext } from "../contexts/AccessTokenContext.jsx";
 
 export const MainPage = () => {
-  const [area, setArea] = useState("all");
-  const [startDate, setStartDate] = useState(() => dayjs().locale("ko"));
-  const [endDate, setEndDate] = useState(() => dayjs().locale("ko"));
-  const [destinations, setDestinations] = useState([]);
+  const [ area, setArea ] = useState("all");
+  const [ startDate, setStartDate ] = useState(() => dayjs().locale("ko"));
+  const [ endDate, setEndDate ] = useState(() => dayjs().locale("ko"));
+  const [ destinations, setDestinations ] = useState([]);
 
-  const {accessToken} = useAccessTokenContext();
+  const { accessToken } = useAccessTokenContext();
 
   const navigate = useNavigate();
 
@@ -59,26 +59,30 @@ export const MainPage = () => {
       keywords: []
     };
 
-    setDestinations(() => [...destinations, empty]);
+    setDestinations(() => [ ...destinations, empty ]);
   }
 
   function removeDestination(destinationIndex) {
     destinations.splice(destinationIndex, 1);
-    setDestinations(() => [...destinations]);
+    setDestinations(() => [ ...destinations ]);
   }
 
   function removeKeyword(destinationIndex, keywordIndex) {
     destinations[destinationIndex].keywords.splice(keywordIndex, 1);
-    setDestinations(() => [...destinations]);
+    setDestinations(() => [ ...destinations ]);
   }
 
   function addKeyword(destinationIndex, keyword) {
     destinations[destinationIndex].keywords.push(keyword);
-    setDestinations(() => [...destinations]);
+    setDestinations(() => [ ...destinations ]);
+  }
+
+  function isLoggedIn() {
+    return accessToken !== null;
   }
 
   function isReadyForGeneratingTravelPlan() {
-    return !isDestinationKeywordsEmpty(destinations) && isDateRangeValid(startDate, endDate);
+    return !isDestinationKeywordsEmpty(destinations) && isDateRangeValid(startDate, endDate) && isLoggedIn();
 
     function isDestinationKeywordsEmpty(destinations) {
       const nonEmpty = destinations.filter(destination => destination.keywords.length !== 0);
@@ -96,10 +100,10 @@ export const MainPage = () => {
   }
 
   return (
-      <Container maxWidth="sm" sx={{display: "flex", flexDirection: "column", paddingX: 0, height: '100vh'}}>
+      <Container maxWidth="sm" sx={{ display: "flex", flexDirection: "column", paddingX: 0, height: '100vh' }}>
         <TopAppBar></TopAppBar>
 
-        <Stack spacing={2} sx={{marginY: 2, paddingX: 1}}>
+        <Stack spacing={2} sx={{ marginY: 2, paddingX: 1 }}>
           <TravelAreaSelect
               area={area}
               onChange={(newArea) => setArea(newArea)}
@@ -119,41 +123,46 @@ export const MainPage = () => {
               onChange={(newDate) => setEndDate(newDate)}
           ></KoreanDatePicker>
 
-            {
-              destinations.map((destination, destinationIndex) => (
-                  <DestinationCard
-                      key={destinationIndex}
-                      keywords={destination.keywords}
-                      onDelete={() => removeDestination(destinationIndex)}
-                      onRemoveKeyword={(keywordIndex) => removeKeyword(destinationIndex, keywordIndex)}
-                      onAddKeyword={(keyword) => addKeyword(destinationIndex, keyword)}
-                  ></DestinationCard>
-              ))
-            }
+          {
+            destinations.map((destination, destinationIndex) => (
+                <DestinationCard
+                    key={destinationIndex}
+                    keywords={destination.keywords}
+                    onDelete={() => removeDestination(destinationIndex)}
+                    onRemoveKeyword={(keywordIndex) => removeKeyword(destinationIndex, keywordIndex)}
+                    onAddKeyword={(keyword) => addKeyword(destinationIndex, keyword)}
+                ></DestinationCard>
+            ))
+          }
+
+          {
+            !isLoggedIn() && <Alert severity="error">로그인이 필요합니다.</Alert>
+          }
 
           <Button
               variant={"outlined"}
               size={"large"}
               onClick={handleDestinationAddButtonClick}
+              disabled={!isLoggedIn()}
           >
             여행지 추가
           </Button>
         </Stack>
 
-        <Box sx={{flexGrow: 1}}></Box>
+        <Box sx={{ flexGrow: 1 }}></Box>
 
         <AppBar
             position="sticky"
             color="transparent"
             elevation={0}
-            sx={{bottom: 0, paddingX: 1}}
+            sx={{ bottom: 0, paddingX: 1 }}
         >
           <Button
               variant="contained"
               size={"large"}
               onClick={handleTravelPlanGenerateButtonClick}
               disabled={!isReadyForGeneratingTravelPlan()}
-              sx={{marginY: 1}}
+              sx={{ marginY: 1 }}
           >
             여행계획생성
           </Button>
