@@ -1,5 +1,6 @@
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {Container, Stack, Typography, Button, Snackbar, Alert, CircularProgress, Box, Card, CardContent, CardHeader, TextField} from "@mui/material";
@@ -41,7 +42,13 @@ export const TimelinePage = () => {
       <CardHeader
         title={destination.place}
         action={
-          editingIndex !== index && (
+          editingIndex === index ? (
+            <IconButton
+              onClick={() => setEditingIndex(null)}
+            >
+              <SaveIcon />
+            </IconButton>
+          ) : (
             <IconButton
               onClick={() => setEditingIndex(index)}
             >
@@ -71,7 +78,7 @@ export const TimelinePage = () => {
               defaultValue={destination.time}
               fullWidth
             />
-            
+
           </Stack>
         ) : (
           <Stack spacing={1}>
