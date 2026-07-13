@@ -1,6 +1,9 @@
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Container, Stack, Typography, Button, Snackbar, Alert, CircularProgress, Box } from "@mui/material";
+import {Container, Stack, Typography, Button, Snackbar, Alert, CircularProgress, Box, Card, CardContent, CardHeader, TextField} from "@mui/material";
 import {
   Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem,
   TimelineOppositeContent, TimelineSeparator
@@ -18,6 +21,8 @@ export const TimelinePage = () => {
 
   const travelPlan = location.state?.travelPlan || [];
 
+  const [editingIndex, setEditingIndex] = useState(null);
+
   function isLoggedIn() {
     return accessToken !== null;
   }
@@ -31,33 +36,65 @@ export const TimelinePage = () => {
   return (
       <Container maxWidth="sm" sx={{ paddingX: 0, height: '100vh' }}>
         <TopAppBar/>
-        <Timeline>
-          {
-            travelPlan.destinations?.map((destination, index) => {
-              const isLastElement = index === travelPlan.destinations.length - 1;
+        <Stack spacing={2} sx={{ p: 2 }}>
+  {travelPlan.destinations?.map((destination, index) => (
+    <Card key={index}>
+      <CardHeader
+        title={destination.place}
+        action={
+          editingIndex === index ? (
+            <IconButton
+              onClick={() => setEditingIndex(null)}
+            >
+              <SaveIcon />
+            </IconButton>
+          ) : (
+            <IconButton
+              onClick={() => setEditingIndex(index)}
+            >
+              <EditIcon />
+            </IconButton>
+          )
+        }
+      />
 
-              return (
-                  <TimelineItem key={index}>
-                    <TimelineOppositeContent>
-                      <Stack>
-                        <Typography variant="body2">{destination.date}</Typography>
-                        <Typography variant="body2">{destination.time}</Typography>
-                      </Stack>
-                    </TimelineOppositeContent>
+      <CardContent sx={{ paddingTop: 0 }}>
+        {editingIndex === index ? (
+          <Stack spacing={2}>
+            <TextField
+              label="여행지"
+              defaultValue={destination.place}
+              fullWidth
+            />
 
-                    <TimelineSeparator>
-                      <TimelineDot/>
-                      {!isLastElement && <TimelineConnector/>}
-                    </TimelineSeparator>
+            <TextField
+              label="날짜"
+              defaultValue={destination.date}
+              fullWidth
+            />
 
-                    <TimelineContent>
-                      <Typography variant="h6">{destination.place}</Typography>
-                    </TimelineContent>
-                  </TimelineItem>
-              );
-            })
-          }
-        </Timeline>
+            <TextField
+              label="시간"
+              defaultValue={destination.time}
+              fullWidth
+            />
+
+          </Stack>
+        ) : (
+          <Stack spacing={1}>
+            <Typography>
+              {destination.date}
+            </Typography>
+
+            <Typography>
+              {destination.time}
+            </Typography>
+          </Stack>
+        )}
+      </CardContent>
+    </Card>
+  ))}
+</Stack>
       </Container>
   );
 }
