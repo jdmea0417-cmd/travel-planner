@@ -18,6 +18,8 @@ export const TimelinePage = () => {
 
   const travelPlan = location.state?.travelPlan || [];
 
+  const [editingIndex, setEditingIndex] = useState(null);
+
   function isLoggedIn() {
     return accessToken !== null;
   }
@@ -46,6 +48,12 @@ export const TimelinePage = () => {
         <Typography>
           {destination.time}
         </Typography>
+
+        <Button
+          onClick={() => setEditingIndex(index)}
+        >
+          수정
+        </Button>
       </CardContent>
     </Card>
   ))}
