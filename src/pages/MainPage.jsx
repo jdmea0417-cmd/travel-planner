@@ -41,7 +41,7 @@ export const MainPage = () => {
     try {
       const response = await api.post("/travel-plan", data, config);
 
-      if (response.status !== HttpStatusCode.Ok) {
+      if (response.status !== HttpStatusCode.Created) {
         return;
       }
 
