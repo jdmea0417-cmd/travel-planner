@@ -1,6 +1,6 @@
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Container, Stack, Typography, Button, Snackbar, Alert, CircularProgress, Box, Card, CardContent, TextField } from "@mui/material";
+import {Container, Stack, Typography, Button, Snackbar, Alert, CircularProgress, Box, Card, CardContent, CardHeader, TextField} from "@mui/material";
 import {
   Timeline, TimelineConnector, TimelineContent, TimelineDot, TimelineItem,
   TimelineOppositeContent, TimelineSeparator
@@ -36,6 +36,10 @@ export const TimelinePage = () => {
         <Stack spacing={2} sx={{ p: 2 }}>
   {travelPlan.destinations?.map((destination, index) => (
     <Card key={index}>
+      <CardHeader
+        title={destination.place}
+      />
+
       <CardContent>
         {editingIndex === index ? (
           <>
@@ -65,10 +69,6 @@ export const TimelinePage = () => {
           </>
         ) : (
           <>
-            <Typography variant="h6">
-              {destination.place}
-            </Typography>
-
             <Typography>
               {destination.date}
             </Typography>
