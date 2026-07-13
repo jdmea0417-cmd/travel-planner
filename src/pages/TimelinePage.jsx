@@ -37,23 +37,46 @@ export const TimelinePage = () => {
   {travelPlan.destinations?.map((destination, index) => (
     <Card key={index}>
       <CardContent>
-        <Typography variant="h6">
-          {destination.place}
-        </Typography>
+        {editingIndex === index ? (
+          <>
+            <TextField
+              defaultValue={destination.place}
+              fullWidth
+            />
 
-        <Typography>
-          {destination.date}
-        </Typography>
+            <TextField
+              defaultValue={destination.date}
+              fullWidth
+              sx={{ mt: 1 }}
+            />
 
-        <Typography>
-          {destination.time}
-        </Typography>
+            <TextField
+              defaultValue={destination.time}
+              fullWidth
+              sx={{ mt: 1 }}
+            />
+          </>
+        ) : (
+          <>
+            <Typography variant="h6">
+              {destination.place}
+            </Typography>
 
-        <Button
-          onClick={() => setEditingIndex(index)}
-        >
-          수정
-        </Button>
+            <Typography>
+              {destination.date}
+            </Typography>
+
+            <Typography>
+              {destination.time}
+            </Typography>
+
+            <Button
+              onClick={() => setEditingIndex(index)}
+            >
+              수정
+            </Button>
+          </>
+        )}
       </CardContent>
     </Card>
   ))}
