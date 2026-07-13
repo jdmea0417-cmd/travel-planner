@@ -55,16 +55,19 @@ export const TimelinePage = () => {
         {editingIndex === index ? (
           <Stack spacing={2}>
             <TextField
+              label="여행지"
               defaultValue={destination.place}
               fullWidth
             />
 
             <TextField
+              label="날짜"
               defaultValue={destination.date}
               fullWidth
             />
 
             <TextField
+              label="시간"
               defaultValue={destination.time}
               fullWidth
             />
