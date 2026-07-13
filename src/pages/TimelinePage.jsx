@@ -17,8 +17,6 @@ export const TimelinePage = () => {
   const { accessToken } = useAccessTokenContext();
 
   const travelPlan = location.state?.travelPlan || [];
-  
-  const [editingIndex, setEditingIndex] = useState(null);
 
   function isLoggedIn() {
     return accessToken !== null;
@@ -33,66 +31,24 @@ export const TimelinePage = () => {
   return (
       <Container maxWidth="sm" sx={{ paddingX: 0, height: '100vh' }}>
         <TopAppBar/>
-        <Stack spacing={2} sx={{ padding: 2 }}>
-          {
-            travelPlan.destinations?.map((destination, index) => (
-              <card key={index}>
-                </cardcontent>
+        <Stack spacing={2} sx={{ p: 2 }}>
+  {travelPlan.destinations?.map((destination, index) => (
+    <Card key={index}>
+      <CardContent>
+        <Typography variant="h6">
+          {destination.place}
+        </Typography>
 
-                  {
-                    editingIndex === index ? (
-                      <>
-                        <TextField
-                  defaultValue={destination.place}
-                  fullWidth
-                />
+        <Typography>
+          {destination.date}
+        </Typography>
 
-                <TextField
-                  defaultValue={destination.date}
-                  fullWidth
-                  sx={{ mt: 1 }}
-                />
-
-                <TextField
-                  defaultValue={destination.time}
-                  fullWidth
-                  sx={{ mt: 1 }}
-                />
-
-                <Button
-                  sx={{ mt: 1 }}
-                  onClick={() => setEditingIndex(null)}
-                >
-                  저장
-                </Button>
-              </>
-            ) : (
-              <>
-                <Typography variant="h6">
-                  {destination.place}
-                </Typography>
-
-                <Typography>
-                  {destination.date}
-                </Typography>
-
-                <Typography>
-                  {destination.time}
-                </Typography>
-
-                <Button
-                  onClick={() => setEditingIndex(index)}
-                >
-                  수정
-                </Button>
-              </>
-            )
-          }
-
-        </CardContent>
-      </Card>
-    ))
-  }
+        <Typography>
+          {destination.time}
+        </Typography>
+      </CardContent>
+    </Card>
+  ))}
 </Stack>
       </Container>
   );
