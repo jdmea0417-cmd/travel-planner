@@ -2,6 +2,7 @@ import { Card, CardActionArea, CardContent, CardHeader, IconButton, Stack, Typog
 import DeleteIcon from '@mui/icons-material/Delete';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import PlaceIcon from '@mui/icons-material/Place';
+import { Areas } from "../constants/areas.js";
 
 export const TravelPlanCard = ({ travelPlan, onClick, onDelete }) => {
   return (
@@ -27,7 +28,7 @@ export const TravelPlanCard = ({ travelPlan, onClick, onDelete }) => {
               <Stack direction={"row"} sx={{ alignItems: 'center' }}>
                 <PlaceIcon sx={{ marginRight: 1 }}/>
                 <Typography variant="body2">
-                  {travelPlan.area}
+                  {Areas.getName(travelPlan.area)}
                 </Typography>
               </Stack>
 
