@@ -9,6 +9,7 @@ import { DestinationCard } from "../components/DestinationCard.jsx";
 import { TopAppBar } from "../components/TopAppBar.jsx";
 import { api } from "../api/axios.js";
 import { useAccessTokenContext } from "../contexts/AccessTokenContext.jsx";
+import { HttpStatusCode } from "axios";
 
 export const MainPage = () => {
   const [ area, setArea ] = useState("all");
@@ -40,7 +41,7 @@ export const MainPage = () => {
     try {
       const response = await api.post("/travel-plan", data, config);
 
-      if (response.status !== 200) {
+      if (response.status !== HttpStatusCode.Ok) {
         return;
       }
 

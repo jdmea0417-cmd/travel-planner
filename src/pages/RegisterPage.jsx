@@ -11,6 +11,7 @@ import { api } from "../api/axios.js";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HomeIcon from '@mui/icons-material/Home';
+import { HttpStatusCode } from "axios";
 
 export default function RegisterPage() {
   const [ name, setName ] = useState("");
@@ -38,7 +39,7 @@ export default function RegisterPage() {
 
     await api.post("/auth/register", data, config)
         .then((response) => {
-          if (response.status !== 201) {
+          if (response.status !== HttpStatusCode.Created) {
             return;
           }
 

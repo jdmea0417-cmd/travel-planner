@@ -13,6 +13,7 @@ import { useState } from "react";
 import { api } from "../api/axios.js";
 import { useAccessTokenContext } from "../contexts/AccessTokenContext.jsx";
 import HomeIcon from '@mui/icons-material/Home';
+import { HttpStatusCode } from "axios";
 
 export default function LoginPage() {
   const [ userId, setUserId ] = useState("");
@@ -42,7 +43,7 @@ export default function LoginPage() {
 
       const response = await api.post("/auth/login", data);
 
-      if (response.status !== 200) {
+      if (response.status !== HttpStatusCode.Ok) {
         return;
       }
 

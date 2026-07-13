@@ -128,7 +128,7 @@ export const HistoryPage = () => {
 
         const response = await api.get('/travel-plan', config);
 
-        if (response.status !== 200) {
+        if (response.status !== HttpStatusCode.Ok) {
           return;
         }
 
@@ -176,7 +176,7 @@ export const HistoryPage = () => {
 
       const response = await api.delete(`/travel-plan/${toBeDeleted.id}`, config);
 
-      if (response.status !== 204) {
+      if (response.status !== HttpStatusCode.NoContent) {
         return;
       }
 
