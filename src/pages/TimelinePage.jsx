@@ -30,7 +30,14 @@ export const TimelinePage = () => {
 
   const [ editingIndex, setEditingIndex ] = useState(null);
 
-  // TODO
+  const [destinations, setDestinations] = useState(
+  travelPlan.destinations || []
+  );
+
+  const [editedPlace, setEditedPlace] = useState("");
+  const [editedDate, setEditedDate] = useState("");
+  const [editedTime, setEditedTime] = useState("");
+
   function isLoggedIn() {
     return true;
     return accessToken !== null;
