@@ -6,8 +6,9 @@ import { Areas } from "../constants/areas.js";
 
 export const TravelPlanCard = ({ travelPlan, onClick, onDelete }) => {
   return (
-    <Card>
-      <CardActionArea component="div" onClick={onClick}>
+      <Card>
+        <CardActionArea onClick={onClick}>
+
           <CardHeader
               title={
                 <Typography variant="h6">
@@ -24,7 +25,7 @@ export const TravelPlanCard = ({ travelPlan, onClick, onDelete }) => {
           <CardContent sx={{ paddingTop: 0 }}>
             <Stack direction="column" spacing={1}>
 
-              <Stack direction="row" sx={{ alignItems: 'center' }}>
+              <Stack direction={"row"} sx={{ alignItems: 'center' }}>
                 <PlaceIcon sx={{ marginRight: 1 }}/>
                 <Typography variant="body2">
                   {Areas.getName(travelPlan.area)}
@@ -40,7 +41,8 @@ export const TravelPlanCard = ({ travelPlan, onClick, onDelete }) => {
 
             </Stack>
           </CardContent>
-      </CardActionArea>
-    </Card>
+
+        </CardActionArea>
+      </Card>
   );
-};
+}
