@@ -35,9 +35,7 @@ export const TimelinePage = () => {
   const [ editedDate, setEditedDate ] = useState("");
   const [ editedTime, setEditedTime ] = useState("");
 
-  // TODO
   function isLoggedIn() {
-    return true;
     return accessToken !== null;
   }
 
@@ -86,11 +84,6 @@ export const TimelinePage = () => {
           Authorization: `Bearer ${accessToken}`
         }
       };
-
-      // TODO
-      updateDestination(data, index);
-      setEditingIndex(null);
-      return;
 
       const response = await api.put(`/travel-plan/${destination.id}`, data, config);
 

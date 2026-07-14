@@ -155,9 +155,7 @@ export const HistoryPage = () => {
     }
   }, [ accessToken, navigate ]);
 
-  // TODO
   function isLoggedIn() {
-    return true;
     return accessToken !== null;
   }
 
@@ -198,17 +196,6 @@ export const HistoryPage = () => {
       console.error(error);
     }
   }
-
-  // TODO
-  useEffect(function setIsLoadingFalseAfterOneSecond() {
-    async function setIsLoadingAfterTimeout(timeout) {
-      await new Promise(resolve => setTimeout(resolve, timeout));
-
-      setIsLoading(false);
-    }
-
-    setIsLoadingAfterTimeout(1000)
-  }, [])
 
   function getSkeletons() {
     return [ ...Array(3) ].map((_, index) => (
