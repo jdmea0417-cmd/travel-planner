@@ -33,10 +33,6 @@ export const TimelinePage = () => {
 
   const [ editingIndex, setEditingIndex ] = useState(null);
 
-  const [editedPlace, setEditedPlace] = useState("");
-  const [editedDate, setEditedDate] = useState("");
-  const [editedTime, setEditedTime] = useState("");
-
   function isLoggedIn() {
     return true;
     return accessToken !== null;
@@ -61,10 +57,6 @@ export const TimelinePage = () => {
                 <IconButton
                     onClick={() => {
                       setEditingIndex(index);
-
-                      setEditedPlace(destination.place);
-                      setEditedDate(destination.date);
-                      setEditedTime(destination.time);
                     }}
                 >
                     <EditIcon/>
