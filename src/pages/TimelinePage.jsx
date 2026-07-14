@@ -106,11 +106,11 @@ export const TimelinePage = () => {
 
               <KoreanDatePicker
                   label={"날짜"}
-                  value={destination.time}
+                  value={destination.date}
               />
 
-              {/*TODO*/}
-              {/*TimePicker*/}
+              // TODO
+              // TimePicker 컴포넌트 사용하기
               <TextField
                   label="시간"
                   defaultValue={destination.time}
