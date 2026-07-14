@@ -113,7 +113,9 @@ export const TimelinePage = () => {
         endDate: travelPlan.endDate,
         destinations: updatedDestinations.map(destination => ({
           id: destination.id,
-          place: destination.place,
+          keywords: [
+            destination.place
+          ],
           date: destination.date,
           time: destination.time,
         }))
