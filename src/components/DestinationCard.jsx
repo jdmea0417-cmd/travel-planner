@@ -2,39 +2,44 @@ import {Card, CardContent, CardHeader, Chip, IconButton, Stack, TextField} from 
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useState} from "react";
 
-export const DestinationCard = ({
-  keywords,
-  onDelete,
-  onRemoveKeyword,
-  onAddKeyword
-}) => {
+export const DestinationCard = ({ keywords, onDelete, onRemoveKeyword, onAddKeyword }) => {
   const [text, setText] = useState('');
 
   function handleEnterKeyDownEvent(event) {
-    if (event.key !== 'Enter') return;
-    if (text === '') return;
-    onAddKeyword(text);
-    setText('');
+    if (event.key !== 'Enter') {
+      return;
+    }
+
+    const trimmed = text.trim();
+
+    if (trimmed === "") {
+      return;
+    }
+
+    onAddKeyword(trimmed);
+
+    setText("");
   }
 
   function handleTextFieldChange(event) {
     event.preventDefault();
-    setText(event.target.value);
+
+    setText(() => event.target.value);
   }
 
   return (
       <Card>
         <CardHeader
-            title="여행지"
+            title={"여행지"}
             action={
               <IconButton onClick={() => onDelete()}>
                 <DeleteIcon/>
               </IconButton>
             }
         ></CardHeader>
-        <CardContent>
+        <CardContent sx={{paddingTop: 0}}>
           <Stack spacing={2}>
-            <Stack direction="row" spacing={1} sx={{ overflowX: "auto", height: "32px"}}>
+            <Stack direction="row" spacing={1} sx={{ overflowX: "auto", height: "32px" }}>
               {
                 keywords.map((keyword, keywordIndex) => (
                     <Chip

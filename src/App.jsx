@@ -1,23 +1,23 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { MainPage } from "./pages/MainPage.jsx";
-import { GeneratePlanPage } from "./pages/GeneratePlanPage.jsx";
-import { ResultPage } from "./pages/ResultPage.jsx";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {HistoryPage} from "./pages/HistoryPage.jsx";
+import {MainPage} from "./pages/MainPage.jsx";
+import {TimelinePage} from "./pages/TimelinePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/create" element={<GeneratePlanPage />} />
-          <Route path="/result" element={<ResultPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-        </Routes>
-      </BrowserRouter>
-    </>
+      <>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<MainPage/>}/>
+            <Route path="/history" element={<HistoryPage/>}/>
+            <Route path="/timeline" element={<TimelinePage/>}/>
+            <Route path="/login" element={<LoginPage/>}/>
+            <Route path="/register" element={<RegisterPage/>}/>
+          </Routes>
+        </BrowserRouter>
+      </>
   );
 }
 

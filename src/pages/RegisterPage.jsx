@@ -5,41 +5,49 @@ import {
   Stack,
   TextField,
   Button,
-  Typography,
+  Typography, IconButton,
 } from "@mui/material";
-import {api} from "../api/axios.js";
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { api } from "../api/axios.js";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import HomeIcon from '@mui/icons-material/Home';
+import { HttpStatusCode } from "axios";
 
 export default function RegisterPage() {
-  const [name, setName] = useState("");
-  const [userId, setUserId] = useState("");
-  const [password, setPassword] = useState("");
+  const [ name, setName ] = useState("");
+  const [ userId, setUserId ] = useState("");
+  const [ password, setPassword ] = useState("");
 
   const navigate = useNavigate();
 
+  function isRequiredTextFieldEmpty() {
+    return !name || !userId || !password;
+  }
+
   async function handleRegisterButtonClick() {
-    if (!name || !userId || !password) {
-      alert("모든 빈칸을 채워주세요.");
+    if (isRequiredTextFieldEmpty()) {
       return;
     }
 
-    await api.post("/auth/register", {
+    const data = {
       name: name,
       userId: userId,
       password: password,
-    }, {})
+    };
+
+    const config = {};
+
+    await api.post("/auth/register", data, config)
         .then((response) => {
-          if (response.status !== 201) {
-            alert("회원가입에 실패했습니다.");
+          if (response.status !== HttpStatusCode.Created) {
             return;
           }
-          alert("회원가입이 완료되었습니다!");
+
           navigate("/login");
+
         })
         .catch((error) => {
           console.error(error);
-          alert("회원가입 중 오류가 발생했습니다. 아이디 중복 여부를 확인해 주세요.");
         })
   }
 
@@ -55,6 +63,10 @@ export default function RegisterPage() {
     setPassword(event.target.value);
   }
 
+  function handleHomeButtonClick() {
+    navigate("/");
+  }
+
   return (
       <Container
           maxWidth="xs"
@@ -67,14 +79,21 @@ export default function RegisterPage() {
         <Card sx={{ width: "100%" }}>
           <CardContent>
             <Stack spacing={2}>
-              <Typography variant="h5" align="center">
-                회원가입
-              </Typography>
+              <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+                <IconButton onClick={handleHomeButtonClick}>
+                  <HomeIcon/>
+                </IconButton>
+
+                <Typography variant="h5">
+                  회원가입
+                </Typography>
+              </Stack>
 
               <TextField
                   label="이름"
                   variant="outlined"
                   value={name}
+                  required
                   onChange={handleNameChange}
               />
 
@@ -82,6 +101,7 @@ export default function RegisterPage() {
                   label="아이디"
                   variant="outlined"
                   value={userId}
+                  required
                   onChange={handleUserIdChange}
               />
 
@@ -90,6 +110,7 @@ export default function RegisterPage() {
                   type="password"
                   variant="outlined"
                   value={password}
+                  required
                   onChange={handlePasswordChange}
               />
 

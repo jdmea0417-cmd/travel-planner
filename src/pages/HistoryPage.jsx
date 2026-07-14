@@ -1,0 +1,141 @@
+import { useState, useEffect } from 'react';
+import {
+  Box,
+  Container, Skeleton,
+  Stack,
+  Typography,
+} from '@mui/material';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { api } from '../api/axios';
+import { TopAppBar } from '../components/TopAppBar.jsx';
+import { useAccessTokenContext } from "../contexts/AccessTokenContext.jsx";
+import { TravelPlanCard } from "../components/TravelPlanCard.jsx";
+import { Http } from "@mui/icons-material";
+import { HttpStatusCode } from "axios";
+
+export const HistoryPage = () => {
+  const { accessToken } = useAccessTokenContext();
+
+  const navigate = useNavigate();
+
+  const [ travelPlans, setTravelPlans ] = useState([]);
+  const [ isLoading, setIsLoading ] = useState(true);
+
+  useEffect(() => {
+    const fetchTravelPlans = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          }
+        };
+
+        const response = await api.get('/travel-plan', config);
+
+        if (response.status !== HttpStatusCode.Ok) {
+          return;
+        }
+
+        setTravelPlans(response.data);
+        setIsLoading(false);
+
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (accessToken) {
+      fetchTravelPlans();
+    }
+  }, [ accessToken, navigate ]);
+
+  function isLoggedIn() {
+    return accessToken !== null;
+  }
+
+  if (!isLoggedIn()) {
+    return (
+        <Navigate to="/login"></Navigate>
+    );
+  }
+
+  const navigateToTimelinePage = (travelPlan) => {
+    const options = {
+      state: {
+        travelPlan: travelPlan
+      }
+    }
+    navigate('/timeline', options);
+  };
+
+  async function removeTravelPlan(index) {
+    try {
+      const toBeDeleted = travelPlans.splice(index, 1)[0];
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        }
+      }
+
+      const response = await api.delete(`/travel-plan/${toBeDeleted.id}`, config);
+
+      if (response.status !== HttpStatusCode.NoContent) {
+        return;
+      }
+
+      setTravelPlans([ ...travelPlans ]);
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  function getSkeletons() {
+    return [ ...Array(3) ].map((_, index) => (
+        <Skeleton
+            key={index}
+            variant="rounded"
+            sx={{ height: 136 }}
+        />
+    ));
+  }
+
+  function getTravelPlanCards() {
+    return (
+        travelPlans.map((travelPlan, index) => (
+                <TravelPlanCard
+                    key={index}
+                    travelPlan={travelPlan}
+                    onClick={() => {
+                      navigateToTimelinePage(travelPlan);
+                    }}
+                    onDelete={(event) => {
+                      event.stopPropagation();
+                      removeTravelPlan(index)
+                    }}
+                ></TravelPlanCard>
+            )
+        )
+    );
+  }
+
+  return (
+      <Container
+          maxWidth="sm"
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100vh',
+            paddingX: 0
+          }}
+      >
+        <TopAppBar/>
+        <Stack spacing={2} sx={{ marginY: 2, paddingX: 1 }}>
+          {
+            isLoading ? getSkeletons() : getTravelPlanCards()
+          }
+        </Stack>
+      </Container>
+  );
+};

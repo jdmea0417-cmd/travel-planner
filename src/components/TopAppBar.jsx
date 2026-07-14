@@ -1,19 +1,61 @@
-import {AppBar, Button, IconButton, Toolbar, Typography} from "@mui/material";
-import {useNavigate} from "react-router-dom";
+import { AppBar, Button, IconButton, Switch, Toolbar, Tooltip, Typography, useColorScheme } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import HomeIcon from '@mui/icons-material/Home';
-import {useAccessToken} from "../context/AccessTokenContext.jsx";
+import { useAccessTokenContext } from "../contexts/AccessTokenContext.jsx";
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
+import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
+import HistoryIcon from '@mui/icons-material/History';
 
 export const TopAppBar = () => {
-  const { logout } = useAccessToken();
+  const { accessToken, setAccessToken } = useAccessTokenContext();
+
+  const { mode, setMode } = useColorScheme();
 
   const navigate = useNavigate();
 
-  function handleLogoutButtonClick() {
-    logout();
+  function handleLoginLogoutButtonClick() {
+    setAccessToken(null);
+
+    navigate("/login");
   }
 
   function handleHomeButtonClick() {
     navigate("/");
+  }
+
+  function handleHistoryButtonClick() {
+    navigate("/history");
+  }
+
+  function handleColorSchemeModeButtonClick() {
+    if (mode === "dark") {
+      setMode("light");
+
+    } else if (mode === "light") {
+      setMode("system");
+
+    } else if (mode === "system") {
+      setMode("dark");
+    }
+  }
+
+  function getColorSchemeModeIcon() {
+    if (mode === "dark") {
+      return <DarkModeIcon/>;
+
+    } else if (mode === "light") {
+      return <LightModeIcon/>;
+
+    } else if (mode === "system") {
+      return <SettingsBrightnessIcon/>;
+    }
+  }
+
+  function isLoggedIn() {
+    return accessToken !== null;
   }
 
   return (
@@ -28,8 +70,43 @@ export const TopAppBar = () => {
           >
             <HomeIcon/>
           </IconButton>
-          <Typography sx={{ flexGrow: 1 }}>여행계획도우미</Typography>
-          <Button color="inherit" onClick={handleLogoutButtonClick}>로그아웃</Button>
+
+          <Typography
+              variant="h6"
+              sx={{ flexGrow: 1 }}
+          >
+            여행계획도우미
+          </Typography>
+
+          <IconButton
+              size="large"
+              color="inherit"
+              onClick={handleColorSchemeModeButtonClick}
+          >
+            {
+              getColorSchemeModeIcon()
+            }
+          </IconButton>
+
+          {
+              isLoggedIn() &&
+              <IconButton
+                  size="large"
+                  color="inherit"
+                  onClick={handleHistoryButtonClick}
+              >
+                <HistoryIcon/>
+              </IconButton>
+          }
+
+          <Button
+              color="inherit"
+              onClick={handleLoginLogoutButtonClick}
+          >
+            {
+              isLoggedIn() ? "로그아웃" : "로그인"
+            }
+          </Button>
         </Toolbar>
       </AppBar>
   );
