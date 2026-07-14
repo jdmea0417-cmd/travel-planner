@@ -94,6 +94,50 @@ export const TimelinePage = () => {
     );
   }
 
+  async function saveDestination(index) {
+    try {
+
+      const updatedDestinations = [...destinations];
+
+      updatedDestinations[index] = {
+        ...updatedDestinations[index],
+        place: editedPlace,
+        date: editedDate,
+        time: editedTime,
+      };
+
+      const requestBody = {
+        area: travelPlan.area,
+        startDate: travelPlan.startDate,
+        endDate: travelPlan.endDate,
+        destinations: updatedDestinations.map(destination => ({
+          keyword: destination.place,
+          date: destination.date,
+          time: destination.time,
+        }))
+      };
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      };
+
+      const response = await api.put(
+        `/travel-plan/${travelPlan.id}`,
+        requestBody,
+        config
+      );
+
+      setDestinations(response.data.destinations);
+
+      setEditingIndex(null);
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   function getEditModeCard(destination, index) {
     return (
         <Card key={index}>
@@ -103,9 +147,9 @@ export const TimelinePage = () => {
               }
               action={
                 <IconButton
-                    onClick={() => setEditingIndex(null)}
+                    onClick={() => saveDestination(index)}
                 >
-                  <SaveIcon/>
+                    <SaveIcon/>
                 </IconButton>
               }
           />
@@ -114,19 +158,20 @@ export const TimelinePage = () => {
             <Stack spacing={2}>
               <TextField
                   label="여행지"
-                  defaultValue={destination.place}
+                  value={editedPlace}
+                  onChange={(e) => setEditedPlace(e.target.value)}
               />
 
               <KoreanDatePicker
                   label={"날짜"}
-                  value={destination.date}
+                  value={editedDate}
+                  onChange={(value) => setEditedDate(value)}
               />
 
-              // TODO
-              // TimePicker 컴포넌트 사용하기
               <TextField
                   label="시간"
-                  defaultValue={destination.time}
+                  value={editedTime}
+                  onChange={(e) => setEditedTime(e.target.value)}
               />
             </Stack>
           </CardContent>
