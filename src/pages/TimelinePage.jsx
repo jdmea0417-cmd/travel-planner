@@ -35,7 +35,9 @@ export const TimelinePage = () => {
   const [ editedDate, setEditedDate ] = useState("");
   const [ editedTime, setEditedTime ] = useState("");
 
+  // TODO
   function isLoggedIn() {
+    return true;
     return accessToken !== null;
   }
 
@@ -45,12 +47,12 @@ export const TimelinePage = () => {
     );
   }
 
-  function updateDestinationAt(destination, index) {
+  function updateDestination(newDestination, index) {
     const destinations = [
       ...travelPlan.destinations
     ];
 
-    destinations[index] = destination;
+    destinations[index] = newDestination;
 
     setTravelPlan({
       ...travelPlan,
@@ -67,15 +69,15 @@ export const TimelinePage = () => {
    * @param index
    * @returns {Promise<void>}
    */
-  async function updateDestination(index) {
+  async function saveDestination(index) {
     try {
       const destination = travelPlan.destinations[index];
 
       const data = {
         id: destination.id,
         place: editedPlace,
-        date: editedDate,
-        time: editedTime,
+        date: editedDate.format("YYYY-MM-DD"),
+        time: editedTime.format("HH:mm"),
         keywords: [ "" ],
       };
 
@@ -85,13 +87,18 @@ export const TimelinePage = () => {
         }
       };
 
+      // TODO
+      updateDestination(data, index);
+      setEditingIndex(null);
+      return;
+
       const response = await api.put(`/travel-plan/${destination.id}`, data, config);
 
       if (response.status !== HttpStatusCode.Ok) {
         return;
       }
 
-      updateDestinationAt(data, index);
+      updateDestination(data, index);
       setEditingIndex(null);
 
     } catch (error) {
@@ -108,7 +115,7 @@ export const TimelinePage = () => {
               }
               action={
                 <IconButton
-                    onClick={() => updateDestination(index)}
+                    onClick={() => saveDestination(index)}
                 >
                   <SaveIcon/>
                 </IconButton>
@@ -120,19 +127,19 @@ export const TimelinePage = () => {
               <TextField
                   label="여행지"
                   value={editedPlace}
-                  onChange={(e) => setEditedPlace(e.target.value)}
+                  onChange={(event) => setEditedPlace(event.target.value)}
               />
 
               <KoreanDatePicker
                   label={"날짜"}
                   value={editedDate}
-                  onChange={(value) => setEditedDate(value)}
+                  onChange={(date) => setEditedDate(date)}
               />
 
-              <TextField
+              <KoreanTimePicker
                   label="시간"
                   value={editedTime}
-                  onChange={(e) => setEditedTime(e.target.value)}
+                  onChange={(time) => setEditedTime(time)}
               />
             </Stack>
           </CardContent>
