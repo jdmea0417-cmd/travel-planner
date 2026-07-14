@@ -124,7 +124,7 @@ export const TimelinePage = () => {
   return (
       <Container maxWidth="sm" sx={{ paddingX: 0, height: '100vh' }}>
         <TopAppBar/>
-        <Stack spacing={2} sx={{ p: 2 }}>
+        <Stack spacing={2} sx={{ marginY: 2, paddingX: 1 }}>
           {
             travelPlan.destinations?.map((destination, index) => (
                 index === editingIndex ?
