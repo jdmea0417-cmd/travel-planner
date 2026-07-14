@@ -18,7 +18,6 @@ import { KoreanDatePicker } from "../components/KoreanDatePicker.jsx";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import { api } from "../api/axios.js";
-import { KoreanTimePicker } from "../components/KoreanTimePicker.jsx";
 import { HttpStatusCode } from "axios";
 
 export const TimelinePage = () => {
@@ -45,12 +44,12 @@ export const TimelinePage = () => {
     );
   }
 
-  function updateDestination(newDestination, index) {
+  function updateDestinationAt(destination, index) {
     const destinations = [
       ...travelPlan.destinations
     ];
 
-    destinations[index] = newDestination;
+    destinations[index] = destination;
 
     setTravelPlan({
       ...travelPlan,
@@ -67,16 +66,14 @@ export const TimelinePage = () => {
    * @param index
    * @returns {Promise<void>}
    */
-  async function saveDestination(index) {
+  async function updateDestination(index) {
     try {
       const destination = travelPlan.destinations[index];
 
       const data = {
-        id: destination.id,
         place: editedPlace,
-        date: editedDate.format("YYYY-MM-DD"),
-        time: editedTime.format("HH:mm"),
-        keywords: [ "" ],
+        date: editedDate,
+        time: editedTime,
       };
 
       const config = {
@@ -85,13 +82,13 @@ export const TimelinePage = () => {
         }
       };
 
-      const response = await api.put(`/travel-plan/${destination.id}`, data, config);
+      const response = await api.put(`/destinations/${destination.id}`, data, config);
 
       if (response.status !== HttpStatusCode.Ok) {
         return;
       }
 
-      updateDestination(data, index);
+      updateDestinationAt(data, index);
       setEditingIndex(null);
 
     } catch (error) {
@@ -108,7 +105,7 @@ export const TimelinePage = () => {
               }
               action={
                 <IconButton
-                    onClick={() => saveDestination(index)}
+                    onClick={() => updateDestination(index)}
                 >
                   <SaveIcon/>
                 </IconButton>
@@ -120,19 +117,19 @@ export const TimelinePage = () => {
               <TextField
                   label="여행지"
                   value={editedPlace}
-                  onChange={(event) => setEditedPlace(event.target.value)}
+                  onChange={(e) => setEditedPlace(e.target.value)}
               />
 
               <KoreanDatePicker
                   label={"날짜"}
                   value={editedDate}
-                  onChange={(date) => setEditedDate(date)}
+                  onChange={(value) => setEditedDate(value)}
               />
 
-              <KoreanTimePicker
+              <TextField
                   label="시간"
                   value={editedTime}
-                  onChange={(time) => setEditedTime(time)}
+                  onChange={(e) => setEditedTime(e.target.value)}
               />
             </Stack>
           </CardContent>
