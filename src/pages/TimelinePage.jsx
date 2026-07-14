@@ -88,6 +88,15 @@ export const TimelinePage = () => {
   async function saveDestination(index) {
     try {
 
+      const updatedDestinations = [...destinations];
+
+      updatedDestinations[index] = {
+        ...updatedDestinations[index],
+        place: editedPlace,
+        date: editedDate,
+        time: editedTime,
+      };
+
       const requestBody = {
         area: travelPlan.area,
         startDate: travelPlan.startDate,
@@ -132,7 +141,7 @@ export const TimelinePage = () => {
               }
               action={
                 <IconButton
-                    onClick={saveDestination}
+                    onClick={() => saveDestination(index)}
                 >
                     <SaveIcon/>
                 </IconButton>
