@@ -18,6 +18,7 @@ import { KoreanDatePicker } from "../components/KoreanDatePicker.jsx";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import { api } from "../api/axios.js";
+import { HttpStatusCode } from "axios";
 
 export const TimelinePage = () => {
 
@@ -27,18 +28,13 @@ export const TimelinePage = () => {
 
   const { accessToken } = useAccessTokenContext();
 
-  const travelPlan = location.state?.travelPlan || [];
-
+  const [ travelPlan, setTravelPlan ] = useState(location.state?.travelPlan || { destinations: [] });
   const [ editingIndex, setEditingIndex ] = useState(null);
+  const [ editedPlace, setEditedPlace ] = useState("");
+  const [ editedDate, setEditedDate ] = useState("");
+  const [ editedTime, setEditedTime ] = useState("");
 
-  const [destinations, setDestinations] = useState(
-  travelPlan.destinations || []
-  );
-
-  const [editedPlace, setEditedPlace] = useState("");
-  const [editedDate, setEditedDate] = useState("");
-  const [editedTime, setEditedTime] = useState("");
-
+  // TODO
   function isLoggedIn() {
     return true;
     return accessToken !== null;
@@ -50,75 +46,28 @@ export const TimelinePage = () => {
     );
   }
 
-  function getViewModeCard(destination, index) {
-    return (
-        <Card key={index}>
-          <CardHeader
-              title={
-                <Typography variant="h6">
-                  {destination.place}
-                </Typography>
-              }
-              action={
-                <IconButton
-                    onClick={() => {
-                      setEditingIndex(index);
+  function updateDestinationAt(destination, index) {
+    const destinations = [
+      ...travelPlan.destinations
+    ];
 
-                      setEditedPlace(destination.place);
-                      setEditedDate(destination.date);
-                      setEditedTime(destination.time);
-                    }}
-                >
-                    <EditIcon/>
-                </IconButton>
-              }
-          />
+    destinations[index] = destination;
 
-          <CardContent sx={{ paddingTop: 0 }}>
-            <Stack spacing={1}>
-              <Stack direction={"row"} sx={{ alignItems: 'center' }}>
-                <CalendarTodayIcon sx={{ marginRight: 1 }}/>
-                <Typography variant="body2">
-                  {destination.date}
-                </Typography>
-              </Stack>
-
-              <Stack direction={"row"} sx={{ alignItems: 'center' }}>
-                <ScheduleIcon sx={{ marginRight: 1 }}/>
-                <Typography variant="body2">
-                  {destination.time}
-                </Typography>
-              </Stack>
-            </Stack>
-          </CardContent>
-        </Card>
-    );
+    setTravelPlan({
+      ...travelPlan,
+      destinations: destinations
+    });
   }
 
-  async function saveDestination(index) {
+  async function updateDestination(index) {
     try {
+      const destination = travelPlan.destinations[index];
 
-      const updatedDestinations = [...destinations];
-
-      updatedDestinations[index] = {
-        ...updatedDestinations[index],
+      const data = {
+        id: destination.id,
         place: editedPlace,
         date: editedDate,
         time: editedTime,
-      };
-
-      const requestBody = {
-        area: travelPlan.area,
-        startDate: travelPlan.startDate,
-        endDate: travelPlan.endDate,
-        destinations: updatedDestinations.map(destination => ({
-          id: destination.id,
-          keywords: [
-            destination.place
-          ],
-          date: destination.date,
-          time: destination.time,
-        }))
       };
 
       const config = {
@@ -127,14 +76,18 @@ export const TimelinePage = () => {
         }
       };
 
-      const response = await api.put(
-        `/travel-plan/${travelPlan.id}`,
-        requestBody,
-        config
-      );
+      // TODO
+      updateDestinationAt(data, index);
+      setEditingIndex(null);
+      return;
 
-      setDestinations(response.data.destinations);
+      const response = await api.put(`/travel-plan/${travelPlan.id}`, data, config);
 
+      if (response.status !== HttpStatusCode.Ok) {
+        return;
+      }
+
+      updateDestinationAt(data, index);
       setEditingIndex(null);
 
     } catch (error) {
@@ -151,9 +104,9 @@ export const TimelinePage = () => {
               }
               action={
                 <IconButton
-                    onClick={() => saveDestination(index)}
+                    onClick={() => updateDestination(index)}
                 >
-                    <SaveIcon/>
+                  <SaveIcon/>
                 </IconButton>
               }
           />
@@ -183,12 +136,56 @@ export const TimelinePage = () => {
     );
   }
 
+  function getViewModeCard(destination, index) {
+    return (
+        <Card key={index}>
+          <CardHeader
+              title={
+                <Typography variant="h6">
+                  {destination.place}
+                </Typography>
+              }
+              action={
+                <IconButton
+                    onClick={() => {
+                      setEditingIndex(index);
+                      setEditedPlace(destination.place);
+                      setEditedDate(destination.date);
+                      setEditedTime(destination.time);
+                    }}
+                >
+                  <EditIcon/>
+                </IconButton>
+              }
+          />
+
+          <CardContent sx={{ paddingTop: 0 }}>
+            <Stack spacing={1}>
+              <Stack direction={"row"} sx={{ alignItems: 'center' }}>
+                <CalendarTodayIcon sx={{ marginRight: 1 }}/>
+                <Typography variant="body2">
+                  {destination.date}
+                </Typography>
+              </Stack>
+
+              <Stack direction={"row"} sx={{ alignItems: 'center' }}>
+                <ScheduleIcon sx={{ marginRight: 1 }}/>
+                <Typography variant="body2">
+                  {destination.time}
+                </Typography>
+              </Stack>
+            </Stack>
+          </CardContent>
+        </Card>
+    );
+  }
+
   return (
       <Container maxWidth="sm" sx={{ paddingX: 0, height: '100vh' }}>
         <TopAppBar/>
         <Stack spacing={2} sx={{ marginY: 2, paddingX: 1 }}>
           {
-            destinations?.map((destination, index) => (
+            travelPlan.destinations.map((destination, index) => (
                 index === editingIndex ?
                     getEditModeCard(destination, index) :
                     getViewModeCard(destination, index)
